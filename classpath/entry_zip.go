@@ -1,15 +1,15 @@
 package classpath
 
 import (
-	"path/filepath"
 	"archive/zip"
-	"io/ioutil"
 	"errors"
+	"io/ioutil"
+	"path/filepath"
 )
 
-// ZIP或JAR形式的类路径
+// ZIP或JAR包形式的类路径
 type ZipEntry struct {
-	absPath string
+	absPath string // 包的绝对路径
 }
 
 func newZipEntry(path string) *ZipEntry {
@@ -17,9 +17,10 @@ func newZipEntry(path string) *ZipEntry {
 	if err != nil {
 		panic(err)
 	}
-	return &ZipEntry{absPath}
+	return &ZipEntry{absPath: absPath}
 }
 
+// 加载该包文件下指定的类文件
 func (z *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 	reader, err := zip.OpenReader(z.absPath)
 	if err != nil {
@@ -33,7 +34,6 @@ func (z *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 			if err != nil {
 				return nil, nil, err
 			}
-
 			defer rc.Close()
 			data, err := ioutil.ReadAll(rc)
 			if err != nil {
@@ -45,6 +45,7 @@ func (z *ZipEntry) readClass(className string) ([]byte, Entry, error) {
 	return nil, nil, errors.New("class not found:" + className)
 }
 
+// 返回该包文件的绝对路径
 func (z *ZipEntry) String() string {
 	return z.absPath
 }
