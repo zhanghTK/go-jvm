@@ -3,22 +3,25 @@ package classfile
 import "encoding/binary"
 
 type ClassReader struct {
-	data []byte
+	data []byte // 类的原数据
 }
 
+// u1
 func (c *ClassReader) readUint8() uint8 {
 	val := c.data[0]
 	c.data = c.data[1:]
 	return val
 }
 
+// u2
 func (c *ClassReader) readUint16() uint16 {
 	val := binary.BigEndian.Uint16(c.data)
 	c.data = c.data[2:]
 	return val
 }
 
-func (c *ClassReader) readUin32() uint32 {
+// u4
+func (c *ClassReader) readUint32() uint32 {
 	val := binary.BigEndian.Uint32(c.data)
 	c.data = c.data[4:]
 	return val
@@ -39,8 +42,8 @@ func (c *ClassReader) readUint16s() []uint16 {
 	return s
 }
 
-func (c *ClassReader) readBytes(length uint32) []byte {
-	bytes := c.data[:length]
-	c.data = c.data[length:]
+func (c *ClassReader) readBytes(n uint32) []byte {
+	bytes := c.data[:n]
+	c.data = c.data[n:]
 	return bytes
 }
