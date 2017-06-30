@@ -6,7 +6,7 @@ type MemberInfo struct {
 	accessFlags     uint16          // 访问标识
 	nameIndex       uint16          // 常量名称索引
 	descriptorIndex uint16          // 描述符
-	//attributes      []AttributeInfo // 属性表
+	attributes      []AttributeInfo // 属性表
 }
 
 // 读取字段/方法表

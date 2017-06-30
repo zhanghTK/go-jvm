@@ -37,7 +37,7 @@ type ClassFile struct {
 	interfaces   []uint16      // 接口索引表
 	fields       []*MemberInfo // 字段表
 	methods      []*MemberInfo // 方法表
-	//attributes   []AttributeInfo
+	attributes   []AttributeInfo
 }
 
 // 将已加载的类解析为ClassFile
@@ -69,7 +69,7 @@ func (c *ClassFile) read(reader *ClassReader) {
 	c.interfaces = reader.readUint16s()
 	c.fields = readMembers(reader, c.constantPool)
 	c.methods = readMembers(reader, c.constantPool)
-	//c.attributes = readAttributes(reader, c.constantPool)
+	c.attributes = readAttributes(reader, c.constantPool)
 }
 
 func (c *ClassFile) readAndCheckMagic(reader *ClassReader) {
