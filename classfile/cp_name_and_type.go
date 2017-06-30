@@ -2,7 +2,7 @@ package classfile
 
 /*
 CONSTANT_NameAndType_info {
-    u1 tag;  // 区分常量类型
+    u1 tag;  // 12
     u2 name_index;  // 指向该字段或方法名称常量项的索引
     u2 descriptor_index;  // 指向该字段或方法描述符常量项的索引
 }

@@ -2,9 +2,8 @@ package classfile
 
 import "fmt"
 
-// 常量池存放两类常量：字面量，符号引用
-// 常量池中的每一项常量都是一个表
-// 共有14项表结构数据，在 constant_info 中定义
+// 存储常量池内容（14中表类型结构）
+// 常量池的读取操作
 
 type ConstantPool []ConstantInfo
 

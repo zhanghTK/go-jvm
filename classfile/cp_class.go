@@ -2,8 +2,8 @@ package classfile
 
 /*
 CONSTANT_Class_info {
-    u1 tag;  // 区分常量类型
-    u2 name_index;  // 索引值，指向常量池中一个CONSTANT_Utf8_info的常量
+    u1 tag;  // 7
+    u2 name_index;  // 指向全限定名常量项的索引
 }
 */
 

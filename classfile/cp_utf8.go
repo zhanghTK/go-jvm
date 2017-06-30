@@ -5,8 +5,8 @@ import "unicode/utf16"
 
 /*
 CONSTANT_Utf8_info {
-    u1 tag;  // 区分常量类型
-    u2 length;  // 字符串长度
+    u1 tag;  // 1
+    u2 length;  // 字符数
     u1 bytes[length];  // 字符串
 }
 */

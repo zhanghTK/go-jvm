@@ -4,6 +4,7 @@ import "fmt"
 
 const MAGIC_NUMBER uint32 = 0xCAFEBABE // 魔数值
 
+// class文件结构
 /*
 ClassFile {
     u4             magic;

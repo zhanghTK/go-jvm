@@ -4,8 +4,8 @@ import "math"
 
 /*
 CONSTANT_Integer_info {
-    u1 tag;
-    u4 bytes;
+    u1 tag;  // 3
+    u4 bytes;  // 按照高位在前存储int值
 }
 */
 type ConstantIntegerInfo struct {
@@ -22,8 +22,8 @@ func (c *ConstantIntegerInfo) Value() int32 {
 
 /*
 CONSTANT_Float_info {
-    u1 tag;
-    u4 bytes;
+    u1 tag;  // 4
+    u4 bytes;  // 按照高位在前存储float
 }
 */
 type ConstantFloatInfo struct {
@@ -40,9 +40,9 @@ func (c *ConstantFloatInfo) Value() float32 {
 
 /*
 CONSTANT_Long_info {
-    u1 tag;
-    u4 high_bytes;
-    u4 low_bytes;
+    u1 tag;  // 5
+    u4 high_bytes;  // 按照高位在前存储long，高位
+    u4 low_bytes;  // 按照高位在前存储long，低位
 }
 */
 type ConstantLongInfo struct {
@@ -59,9 +59,9 @@ func (c *ConstantLongInfo) Value() int64 {
 
 /*
 CONSTANT_Double_info {
-    u1 tag;
-    u4 high_bytes;
-    u4 low_bytes;
+    u1 tag;  // 6
+    u4 high_bytes;  // 按照高位在前存储double，高位
+    u4 low_bytes;  // 按照高位在前存储double，低位
 }
 */
 type ConstantDoubleInfo struct {

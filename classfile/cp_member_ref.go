@@ -2,17 +2,17 @@ package classfile
 
 /*
 CONSTANT_Fieldref_info {
-    u1 tag;  // 区分常量类型
+    u1 tag;  // 9
     u2 class_index;  // 指向声明字段的类或者接口描述符 CONSTANT_Class_info 的索引项
     u2 name_and_type_index;  // 指向字段描述符 CONSTANT_NameAndType 的索引项
 }
 CONSTANT_Methodref_info {
-    u1 tag;  // 区分常量类型
+    u1 tag;  // 10
     u2 class_index;  // 指向声明方法的类描述符CONSTANT_Class_info的索引项
     u2 name_and_type_index;  // 指向字段描述符 CONSTANT_NameAndType 的索引项
 }
 CONSTANT_InterfaceMethodref_info {
-    u1 tag;  // 区分常量类型
+    u1 tag;  // 11
     u2 class_index;  // 指向声明方法的接口描述符CONSTANT_Class_info的索引项
     u2 name_and_type_index;  // 指向字段描述符 CONSTANT_NameAndType 的索引项
 }

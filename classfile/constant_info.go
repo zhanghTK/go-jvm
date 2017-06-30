@@ -1,22 +1,21 @@
 package classfile
 
-// 常量池每项常量都是一个表
-// 共有14中表
+// 常量类型标识声明
 const (
 	CONSTANT_Utf8               = 1  // UTF-8编码字符串
-	CONSTANT_Integer            = 3 // 整型字面量
+	CONSTANT_Integer            = 3  // 整型字面量
 	CONSTANT_Float              = 4  // 浮点型字面量
 	CONSTANT_Long               = 5  // 长整型字面量
 	CONSTANT_Double             = 6  // 双精度浮点型字面量
 	CONSTANT_Class              = 7  // 类或接口的符号引用
 	CONSTANT_String             = 8  // 字符串类型字面量
 	CONSTANT_Fieldref           = 9  // 字段的符号引用
-	CONSTANT_Methodref          = 10  // 类中方法的符号引用
-	CONSTANT_InterfaceMethodref = 11  // 接口中方法的符号引用
-	CONSTANT_NameAndType        = 12  // 字段或方法的部分符号引用
-	CONSTANT_MethodHandle       = 15  // 方法句柄
-	CONSTANT_MethodType         = 16  // 方法类型
-	CONSTANT_InvokeDynamic      = 18  // 懂爱方法调用点
+	CONSTANT_Methodref          = 10 // 类中方法的符号引用
+	CONSTANT_InterfaceMethodref = 11 // 接口中方法的符号引用
+	CONSTANT_NameAndType        = 12 // 字段或方法的部分符号引用
+	CONSTANT_MethodHandle       = 15 // 方法句柄
+	CONSTANT_MethodType         = 16 // 方法类型
+	CONSTANT_InvokeDynamic      = 18 // 动态方法调用点
 )
 
 type ConstantInfo interface {
@@ -30,6 +29,7 @@ func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo {
 	return c
 }
 
+// 根据常量标示类型，创建对应的常量类型
 func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	switch tag {
 	case CONSTANT_Integer:
