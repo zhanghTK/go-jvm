@@ -4,7 +4,7 @@ package classfile
 SourceFile_attribute {
     u2 attribute_name_index;
     u4 attribute_length;
-    u2 sourcefile_index;
+    u2 sourcefile_index;  // 常量池CONSTANT_Utf8_info型常量索引
 }
 */
 type SourceFileAttribute struct {
