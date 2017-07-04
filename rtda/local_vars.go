@@ -1,6 +1,9 @@
 package rtda
 
-import "math"
+import (
+	"math"
+	"GJvm/rtda/heap"
+)
 
 // 局部变量表
 // 对64位的数据类型以高位对齐方式为其分配两个连续的Slot空间
@@ -48,9 +51,9 @@ func (l LocalVars) GetDouble(index uint) float64 {
 	return math.Float64frombits(bits)
 }
 
-func (l LocalVars) SetRef(index uint, ref *Object) {
+func (l LocalVars) SetRef(index uint, ref *heap.Object) {
 	l[index].ref = ref
 }
-func (l LocalVars) GetRef(index uint) *Object {
+func (l LocalVars) GetRef(index uint) *heap.Object {
 	return l[index].ref
 }

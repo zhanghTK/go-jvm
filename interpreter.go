@@ -4,23 +4,18 @@ import (
 	"fmt"
 	"GJvm/rtda"
 	"GJvm/instructions/base"
-	"GJvm/classfile"
 	"GJvm/instructions"
+	"GJvm/rtda/heap"
 )
 
 // 基本的解释器执行模型
-func interpret(methodInfo *classfile.MemberInfo) {
-	codeAttr := methodInfo.CodeAttribute()
-	maxLocals := codeAttr.MaxLocals()
-	maxStack := codeAttr.MaxStack()
-	bytecode := codeAttr.Code()
-
+func interpret(method *heap.Method) {
 	thread := rtda.NewThread()
-	frame := thread.NewFrame(maxLocals, maxStack)
+	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
 
 	defer catchErr(frame)
-	loop(thread, bytecode)
+	loop(thread, method.Code())
 }
 
 func catchErr(frame *rtda.Frame) {

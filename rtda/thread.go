@@ -1,5 +1,7 @@
 package rtda
 
+import "GJvm/rtda/heap"
+
 /*
 JVM
   Thread
@@ -38,6 +40,6 @@ func (t *Thread) CurrentFrame() *Frame {
 	return t.stack.top()
 }
 
-func (t *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
-	return NewFrame(t, maxLocals, maxStack)
+func (t *Thread) NewFrame(method *heap.Method) *Frame {
+	return newFrame(t, method)
 }
