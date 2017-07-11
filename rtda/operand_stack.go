@@ -1,8 +1,8 @@
 package rtda
 
 import (
-	"math"
 	"GJvm/rtda/heap"
+	"math"
 )
 
 // 操作数栈
@@ -81,4 +81,8 @@ func (o *OperandStack) PushSlot(slot Slot) {
 func (o *OperandStack) PopSlot() Slot {
 	o.size--
 	return o.slots[o.size]
+}
+
+func (o *OperandStack) GetRefFromTop(n uint) *heap.Object {
+	return o.slots[o.size-1-n].ref
 }

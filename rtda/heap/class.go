@@ -1,8 +1,8 @@
 package heap
 
 import (
-	"strings"
 	"GJvm/classfile"
+	"strings"
 )
 
 // 运行时类信息
@@ -20,6 +20,7 @@ type Class struct {
 	instanceSlotCount uint          // 实例变量数量
 	staticSlotCount   uint          // 静态变量数量
 	staticVars        Slots         // 静态变量
+	initStarted       bool
 }
 
 // class文件信息转换为class结构体信息
@@ -61,11 +62,30 @@ func (cl *Class) IsEnum() bool {
 }
 
 // getters
+func (cl *Class) Name() string {
+	return cl.name
+}
 func (cl *Class) ConstantPool() *ConstantPool {
 	return cl.constantPool
 }
+func (cl *Class) Fields() []*Field {
+	return cl.fields
+}
+func (cl *Class) Methods() []*Method {
+	return cl.methods
+}
+func (cl *Class) SuperClass() *Class {
+	return cl.superClass
+}
 func (cl *Class) StaticVars() Slots {
 	return cl.staticVars
+}
+func (cl *Class) InitStarted() bool {
+	return cl.initStarted
+}
+
+func (cl *Class) StartInit() {
+	cl.initStarted = true
 }
 
 // jvms 5.4.4
@@ -73,10 +93,10 @@ func (cl *Class) StaticVars() Slots {
 // 1. public修饰
 // 2. 同在一个包下
 func (cl *Class) isAccessibleTo(other *Class) bool {
-	return cl.IsPublic() || cl.getPackageName() == other.getPackageName()
+	return cl.IsPublic() || cl.GetPackageName() == other.GetPackageName()
 }
 
-func (cl *Class) getPackageName() string {
+func (cl *Class) GetPackageName() string {
 	if i := strings.LastIndex(cl.name, "/"); i >= 0 {
 		return cl.name[:i]
 	}
@@ -85,6 +105,9 @@ func (cl *Class) getPackageName() string {
 
 func (cl *Class) GetMainMethod() *Method {
 	return cl.getStaticMethod("main", "([Ljava/lang/String;)V")
+}
+func (self *Class) GetClinitMethod() *Method {
+	return self.getStaticMethod("<clinit>", "()V")
 }
 
 func (cl *Class) getStaticMethod(name, descriptor string) *Method {

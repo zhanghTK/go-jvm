@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"GJvm/classpath"
-	"strings"
 	"GJvm/rtda/heap"
+	"fmt"
+	"strings"
 )
 
 func main() {
@@ -20,13 +20,13 @@ func main() {
 
 func startJVM(cmd *Cmd) {
 	cp := classpath.Parse(cmd.XjreOption, cmd.cpOption)
-	classLoader := heap.NewClassLoader(cp)
+	classLoader := heap.NewClassLoader(cp, cmd.isVerboseClass)
 
 	className := strings.Replace(cmd.class, ".", "/", -1)
 	mainClass := classLoader.LoadClass(className)
 	mainMethod := mainClass.GetMainMethod()
 	if mainMethod != nil {
-		interpret(mainMethod)
+		interpret(mainMethod, cmd.isVerboseInst)
 	} else {
 		fmt.Printf("Main method not found in class %s\n", cmd.class)
 	}

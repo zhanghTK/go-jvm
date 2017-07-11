@@ -1,9 +1,9 @@
 package heap
 
 import (
+	"GJvm/classfile"
 	"GJvm/classpath"
 	"fmt"
-	"GJvm/classfile"
 )
 
 /*
@@ -14,14 +14,16 @@ class names:
     - array classes: [Ljava/lang/Object; ...
 */
 type ClassLoader struct {
-	cp       *classpath.Classpath // 类路径文件加载器指针
-	classMap map[string]*Class    // 已加载类数据（方法区）
+	cp        *classpath.Classpath // 类路径文件加载器指针
+	isVerbose bool
+	classMap  map[string]*Class // 已加载类数据（方法区）
 }
 
-func NewClassLoader(cp *classpath.Classpath) *ClassLoader {
+func NewClassLoader(cp *classpath.Classpath, isVerbose bool) *ClassLoader {
 	return &ClassLoader{
-		cp:       cp,
-		classMap: make(map[string]*Class),
+		cp:        cp,
+		isVerbose: isVerbose,
+		classMap:  make(map[string]*Class),
 	}
 }
 
@@ -40,7 +42,9 @@ func (c *ClassLoader) loadNonArrayClass(name string) *Class {
 	data, entry := c.readClass(name)
 	class := c.defineClass(data)
 	link(class)
-	fmt.Printf("[Loaded %s from %s]\n", name, entry)
+	if c.isVerbose {
+		fmt.Printf("[Loaded %s from %s]\n", name, entry)
+	}
 	return class
 }
 

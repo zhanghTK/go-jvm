@@ -1,8 +1,8 @@
 package extended
 
 import (
-	"GJvm/rtda"
 	"GJvm/instructions/base"
+	"GJvm/rtda"
 )
 
 // Branch if reference is null

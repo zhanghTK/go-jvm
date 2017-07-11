@@ -1,8 +1,8 @@
 package constants
 
 import (
-	"GJvm/rtda"
 	"GJvm/instructions/base"
+	"GJvm/rtda"
 )
 
 // Push item from run-time constant pool

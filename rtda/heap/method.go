@@ -4,9 +4,10 @@ import "GJvm/classfile"
 
 type Method struct {
 	ClassMember
-	maxStack  uint   // 操作数栈大小
-	maxLocals uint   // 局部变量表大小
-	code      []byte // 字节码
+	maxStack     uint   // 操作数栈大小
+	maxLocals    uint   // 局部变量表大小
+	code         []byte // 字节码
+	argSlotCount uint   // 参数个数
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -16,6 +17,7 @@ func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 		methods[i].class = class
 		methods[i].copyMemberInfo(cfMethod)
 		methods[i].copyAttributes(cfMethod)
+		methods[i].calcArgSlotCount()
 	}
 	return methods
 }
@@ -25,6 +27,19 @@ func (m *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 		m.maxStack = codeAttr.MaxStack()
 		m.maxLocals = codeAttr.MaxLocals()
 		m.code = codeAttr.Code()
+	}
+}
+
+func (m *Method) calcArgSlotCount() {
+	parsedDescriptor := parseMethodDescriptor(m.descriptor)
+	for _, paramType := range parsedDescriptor.parameterTypes {
+		m.argSlotCount++
+		if paramType == "J" || paramType == "D" {
+			m.argSlotCount++
+		}
+	}
+	if !m.IsStatic() {
+		m.argSlotCount++ // `this` reference
 	}
 }
 
@@ -56,4 +71,7 @@ func (m *Method) MaxLocals() uint {
 }
 func (m *Method) Code() []byte {
 	return m.code
+}
+func (m *Method) ArgSlotCount() uint {
+	return m.argSlotCount
 }

@@ -1,8 +1,8 @@
 package math
 
 import (
-	"GJvm/rtda"
 	"GJvm/instructions/base"
+	"GJvm/rtda"
 )
 
 // Add double

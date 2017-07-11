@@ -8,12 +8,14 @@ import (
 
 // 接收控制台命令的结构体
 type Cmd struct {
-	isHelp     bool   // 接收-help
-	isVersion  bool   // 接收-version
-	cpOption   string // 接收-cp/-classpath
-	XjreOption string
-	class      string   // 接收主函数
-	args       []string // 接收主函数参数
+	isHelp         bool   // 接收-help
+	isVersion      bool   // 接收-version
+	isVerboseClass bool   // 接收-verbose
+	isVerboseInst  bool   // 接收-verbose:inst
+	cpOption       string // 接收-cp/-classpath
+	XjreOption     string
+	class          string   // 接收主函数
+	args           []string // 接收主函数参数
 }
 
 func parseCmd() *Cmd {
@@ -24,6 +26,9 @@ func parseCmd() *Cmd {
 	flag.BoolVar(&cmd.isHelp, "help", false, "print help message")
 	flag.BoolVar(&cmd.isHelp, "?", false, "print help message")
 	flag.BoolVar(&cmd.isVersion, "version", false, "print version and exit")
+	flag.BoolVar(&cmd.isVerboseClass, "verbose", false, "enable verbose output")
+	flag.BoolVar(&cmd.isVerboseClass, "verbose:class", false, "enable verbose output")
+	flag.BoolVar(&cmd.isVerboseInst, "verbose:inst", false, "enable verbose output")
 	flag.StringVar(&cmd.cpOption, "classpath", "", "classpath")
 	flag.StringVar(&cmd.cpOption, "cp", "", "classpath")
 	flag.StringVar(&cmd.XjreOption, "Xjre", "", "path to jre")

@@ -1,8 +1,8 @@
 package rtda
 
 import (
-	"math"
 	"GJvm/rtda/heap"
+	"math"
 )
 
 // 局部变量表
@@ -56,4 +56,7 @@ func (l LocalVars) SetRef(index uint, ref *heap.Object) {
 }
 func (l LocalVars) GetRef(index uint) *heap.Object {
 	return l[index].ref
+}
+func (l LocalVars) SetSlot(index uint, slot Slot) {
+	l[index] = slot
 }

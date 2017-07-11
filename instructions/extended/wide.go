@@ -3,9 +3,9 @@ package extended
 import (
 	"GJvm/instructions/base"
 	"GJvm/instructions/loads"
-	"GJvm/rtda"
 	"GJvm/instructions/math"
 	"GJvm/instructions/stores"
+	"GJvm/rtda"
 )
 
 // Extend local variable index by additional bytes

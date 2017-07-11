@@ -1,8 +1,8 @@
 package references
 
 import (
-	"GJvm/rtda"
 	"GJvm/instructions/base"
+	"GJvm/rtda"
 	"GJvm/rtda/heap"
 )
 
