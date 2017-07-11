@@ -5,9 +5,10 @@ import (
 	"fmt"
 )
 
-// 常量接口
+// 运行时常量接口
 type Constant interface{}
 
+// 运行时常量池
 type ConstantPool struct {
 	class  *Class
 	consts []Constant

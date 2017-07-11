@@ -15,7 +15,7 @@ class names:
 */
 type ClassLoader struct {
 	cp       *classpath.Classpath // 类路径文件加载器指针
-	classMap map[string]*Class    // loaded classes  // 已加载类数据
+	classMap map[string]*Class    // 已加载类数据（方法区）
 }
 
 func NewClassLoader(cp *classpath.Classpath) *ClassLoader {
@@ -104,7 +104,8 @@ func prepare(class *Class) {
 	allocAndInitStaticVars(class)
 }
 
-// 计算实例字段个数
+// 统计实例字段个数，为实例字段编号
+// 从继承链最顶端开始编号
 func calcInstanceFieldSlotIds(class *Class) {
 	slotId := uint(0)
 	if class.superClass != nil {
@@ -122,7 +123,7 @@ func calcInstanceFieldSlotIds(class *Class) {
 	class.instanceSlotCount = slotId
 }
 
-// 计算类字段个数
+// 统计类字段个数，为实例字段编号
 func calcStaticFieldSlotIds(class *Class) {
 	slotId := uint(0)
 	for _, field := range class.fields {
@@ -147,6 +148,8 @@ func allocAndInitStaticVars(class *Class) {
 	}
 }
 
+// 类变量赋初始值
+// 描述符的补充：https://hacpai.com/article/1365927493304?m=0
 func initStaticFinalVar(class *Class, field *Field) {
 	vars := class.staticVars
 	cp := class.constantPool

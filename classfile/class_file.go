@@ -28,16 +28,16 @@ ClassFile {
 
 type ClassFile struct {
 	// magic uint32  魔数
-	minorVersion uint16        // 次版本
-	majorVersion uint16        // 主版本
-	constantPool ConstantPool  // 常量池
-	accessFlags  uint16        // 访问标识
-	thisClass    uint16        // 类名
-	superClass   uint16        // 超类名
-	interfaces   []uint16      // 接口索引表
-	fields       []*MemberInfo // 字段表
-	methods      []*MemberInfo // 方法表
-	attributes   []AttributeInfo
+	minorVersion uint16          // 次版本
+	majorVersion uint16          // 主版本
+	constantPool ConstantPool    // 常量池
+	accessFlags  uint16          // 访问标识
+	thisClass    uint16          // 类名
+	superClass   uint16          // 超类名
+	interfaces   []uint16        // 接口索引表
+	fields       []*MemberInfo   // 字段表
+	methods      []*MemberInfo   // 方法表
+	attributes   []AttributeInfo // 属性表
 }
 
 // 将已加载的类解析为ClassFile

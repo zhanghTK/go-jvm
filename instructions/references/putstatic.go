@@ -13,6 +13,7 @@ func (ps *PUT_STATIC) Execute(frame *rtda.Frame) {
 	currentMethod := frame.Method()
 	currentClass := currentMethod.Class()
 	cp := currentClass.ConstantPool()
+	// 获取第一个操作数，具体的类变量
 	fieldRef := cp.GetConstant(ps.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
 	class := field.Class()
@@ -27,6 +28,8 @@ func (ps *PUT_STATIC) Execute(frame *rtda.Frame) {
 		}
 	}
 
+	// 从操作数栈获取第二个操作数，具体值
+	// 并为类变量赋值
 	descriptor := field.Descriptor()
 	slotId := field.SlotId()
 	slots := class.StaticVars()

@@ -9,9 +9,9 @@ import (
 // Get static field from class
 type GET_STATIC struct{ base.Index16Instruction }
 
-func (self *GET_STATIC) Execute(frame *rtda.Frame) {
+func (g *GET_STATIC) Execute(frame *rtda.Frame) {
 	cp := frame.Method().Class().ConstantPool()
-	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)
+	fieldRef := cp.GetConstant(g.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
 	class := field.Class()
 	// todo: init class

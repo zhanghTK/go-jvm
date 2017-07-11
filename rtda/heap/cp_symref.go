@@ -1,10 +1,10 @@
 package heap
 
-// 符号引用
+// 运行时常量池的符号引用基本结构
 type SymRef struct {
-	cp        *ConstantPool // 运行时常量池指针
-	className string        // 类的完全限定名
-	class     *Class        // 运行时类结构指针
+	cp        *ConstantPool // 源类的运行时常量池指针
+	className string        // 目标类的完全限定名
+	class     *Class        // 目标类
 }
 
 func (s *SymRef) ResolvedClass() *Class {
@@ -16,11 +16,10 @@ func (s *SymRef) ResolvedClass() *Class {
 
 // jvms8 5.4.3.1
 func (s *SymRef) resolveClassRef() {
-	d := s.cp.class
-	c := d.loader.LoadClass(s.className)
+	d := s.cp.class                      // 源类
+	c := d.loader.LoadClass(s.className) // 使用源类的类加载器根据目标类的完全限定名加载
 	if !c.isAccessibleTo(d) {
 		panic("java.lang.IllegalAccessError")
 	}
-
 	s.class = c
 }

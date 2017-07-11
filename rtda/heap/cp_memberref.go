@@ -2,10 +2,11 @@ package heap
 
 import "GJvm/classfile"
 
+// 类成员（字段/方法）符号引用
 type MemberRef struct {
 	SymRef
-	name       string
-	descriptor string
+	name       string // 名称
+	descriptor string // 描述符
 }
 
 func (m *MemberRef) copyMemberRefInfo(refInfo *classfile.ConstantMemberrefInfo) {

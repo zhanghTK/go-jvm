@@ -11,7 +11,7 @@ type Class struct {
 	name              string        // 类名
 	superClassName    string        // 超类名
 	interfaceNames    []string      // 接口名
-	constantPool      *ConstantPool // 方运行常量指针
+	constantPool      *ConstantPool // 运行时常量池指针
 	fields            []*Field      // 字段表
 	methods           []*Method     // 方法表
 	loader            *ClassLoader  // 类加载器指针
@@ -69,6 +69,9 @@ func (cl *Class) StaticVars() Slots {
 }
 
 // jvms 5.4.4
+// 类的访问条件：
+// 1. public修饰
+// 2. 同在一个包下
 func (cl *Class) isAccessibleTo(other *Class) bool {
 	return cl.IsPublic() || cl.getPackageName() == other.getPackageName()
 }

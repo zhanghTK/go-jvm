@@ -38,18 +38,21 @@ func (f *FieldRef) resolveFieldRef() {
 }
 
 func lookupField(c *Class, name, descriptor string) *Field {
+	// 类内寻找字段
 	for _, field := range c.fields {
 		if field.name == name && field.descriptor == descriptor {
 			return field
 		}
 	}
 
+	// 遍历接口寻找
 	for _, iface := range c.interfaces {
 		if field := lookupField(iface, name, descriptor); field != nil {
 			return field
 		}
 	}
 
+	// 父类中寻找
 	if c.superClass != nil {
 		return lookupField(c.superClass, name, descriptor)
 	}
