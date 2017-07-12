@@ -141,6 +141,16 @@ func (cl *Class) getField(name, descriptor string, isStatic bool) *Field {
 	return nil
 }
 
+func (cl *Class) isJlObject() bool {
+	return cl.name == "java/lang/Object"
+}
+func (cl *Class) isJlCloneable() bool {
+	return cl.name == "java/lang/Cloneable"
+}
+func (cl *Class) isJioSerializable() bool {
+	return cl.name == "java/io/Serializable"
+}
+
 func (cl *Class) NewObject() *Object {
 	return newObject(cl)
 }
