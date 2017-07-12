@@ -8,12 +8,17 @@ import (
 	"fmt"
 )
 
+// 解释器
 func interpret(method *heap.Method, logInst bool) {
+	// 创建线程
 	thread := rtda.NewThread()
+	// 创建栈帧
 	frame := thread.NewFrame(method)
+	// 插入栈帧
 	thread.PushFrame(frame)
-
+	// 异常处理
 	defer catchErr(thread)
+	// 循环处理虚拟机栈内容
 	loop(thread, logInst)
 }
 
@@ -33,17 +38,22 @@ func loop(thread *rtda.Thread, logInst bool) {
 
 		// decode
 		reader.Reset(frame.Method().Code(), pc)
+		// 操作码
 		opcode := reader.ReadUint8()
+		// 根据操作码获取指令
 		inst := instructions.NewInstruction(opcode)
+		// 读取操作数
 		inst.FetchOperands(reader)
+		// 更新PC位置
 		frame.SetNextPC(reader.PC())
 
 		if logInst {
 			logInstruction(frame, inst)
 		}
 
-		// execute
+		// 执行指令
 		inst.Execute(frame)
+
 		if thread.IsStackEmpty() {
 			break
 		}

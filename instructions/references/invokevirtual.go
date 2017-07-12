@@ -11,17 +11,19 @@ import (
 type INVOKE_VIRTUAL struct{ base.Index16Instruction }
 
 func (i *INVOKE_VIRTUAL) Execute(frame *rtda.Frame) {
+	// 解析获得类，方法
 	currentClass := frame.Method().Class()
 	cp := currentClass.ConstantPool()
 	methodRef := cp.GetConstant(i.Index).(*heap.MethodRef)
 	resolvedMethod := methodRef.ResolvedMethod()
+	// 不能是静态方法
 	if resolvedMethod.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
 	}
 
 	ref := frame.OperandStack().GetRefFromTop(resolvedMethod.ArgSlotCount() - 1)
 	if ref == nil {
-		// hack!
+		// todo
 		if methodRef.Name() == "println" {
 			_println(frame.OperandStack(), methodRef.Descriptor())
 			return

@@ -2,8 +2,8 @@ package heap
 
 // 方法描述符
 type MethodDescriptor struct {
-	parameterTypes []string
-	returnType     string
+	parameterTypes []string // 参数类型
+	returnType     string   // 返回值类型
 }
 
 func (m *MethodDescriptor) addParameterType(t string) {

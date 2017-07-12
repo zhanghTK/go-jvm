@@ -5,12 +5,15 @@ import (
 	"GJvm/rtda/heap"
 )
 
+// 初始化类
 func InitClass(thread *rtda.Thread, class *heap.Class) {
 	class.StartInit()
 	scheduleClinit(thread, class)
 	initSuperClass(thread, class)
 }
 
+// 调用类初始化方法
+// 类初始化方法只能由JVM调用
 func scheduleClinit(thread *rtda.Thread, class *heap.Class) {
 	clinit := class.GetClinitMethod()
 	if clinit != nil {

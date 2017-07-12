@@ -31,13 +31,16 @@ func (m *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 }
 
 func (m *Method) calcArgSlotCount() {
+	// 方法描述符
 	parsedDescriptor := parseMethodDescriptor(m.descriptor)
+	// 计算参数个数
 	for _, paramType := range parsedDescriptor.parameterTypes {
 		m.argSlotCount++
 		if paramType == "J" || paramType == "D" {
 			m.argSlotCount++
 		}
 	}
+	// 非静态方法隐含this
 	if !m.IsStatic() {
 		m.argSlotCount++ // `this` reference
 	}

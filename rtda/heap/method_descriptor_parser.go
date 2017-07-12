@@ -8,6 +8,7 @@ type MethodDescriptorParser struct {
 	parsed *MethodDescriptor
 }
 
+// 解析方法描述符
 func parseMethodDescriptor(descriptor string) *MethodDescriptor {
 	parser := &MethodDescriptorParser{}
 	return parser.parse(descriptor)

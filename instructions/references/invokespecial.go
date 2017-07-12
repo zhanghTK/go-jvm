@@ -8,6 +8,7 @@ import (
 
 // Invoke instance method;
 // special handling for superclass, private, and instance initialization method invocations
+// 调用无需绑定的静态方法
 type INVOKE_SPECIAL struct{ base.Index16Instruction }
 
 func (i *INVOKE_SPECIAL) Execute(frame *rtda.Frame) {
@@ -31,6 +32,7 @@ func (i *INVOKE_SPECIAL) Execute(frame *rtda.Frame) {
 		panic("java.lang.NullPointerException")
 	}
 	// 访问限制
+	// todo 确认该逻辑
 	if resolvedMethod.IsProtected() &&
 		resolvedMethod.Class().IsSuperClassOf(currentClass) &&
 		resolvedMethod.Class().GetPackageName() != currentClass.GetPackageName() &&
@@ -40,11 +42,11 @@ func (i *INVOKE_SPECIAL) Execute(frame *rtda.Frame) {
 		panic("java.lang.IllegalAccessError")
 	}
 
+	// todo 确认该逻辑
 	methodToBeInvoked := resolvedMethod
 	if currentClass.IsSuper() &&
 		resolvedClass.IsSuperClassOf(currentClass) &&
 		resolvedMethod.Name() != "<init>" {
-
 		methodToBeInvoked = heap.LookupMethodInClass(currentClass.SuperClass(),
 			methodRef.Name(), methodRef.Descriptor())
 	}
