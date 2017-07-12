@@ -74,6 +74,9 @@ func (cl *Class) Fields() []*Field {
 func (cl *Class) Methods() []*Method {
 	return cl.methods
 }
+func (cl *Class) Loader() *ClassLoader {
+	return cl.loader
+}
 func (cl *Class) SuperClass() *Class {
 	return cl.superClass
 }
@@ -104,25 +107,45 @@ func (cl *Class) GetPackageName() string {
 }
 
 func (cl *Class) GetMainMethod() *Method {
-	return cl.getStaticMethod("main", "([Ljava/lang/String;)V")
+	return cl.getMethod("main", "([Ljava/lang/String;)V", true)
 }
-func (self *Class) GetClinitMethod() *Method {
-	return self.getStaticMethod("<clinit>", "()V")
+func (cl *Class) GetClinitMethod() *Method {
+	return cl.getMethod("<clinit>", "()V", true)
 }
 
-func (cl *Class) getStaticMethod(name, descriptor string) *Method {
-	for _, method := range cl.methods {
-		if isStaticMethod(method, name, descriptor) {
-			return method
+func (cl *Class) getMethod(name, descriptor string, isStatic bool) *Method {
+	for c := cl; c != nil; c = c.superClass {
+		for _, method := range c.methods {
+			if method.IsStatic() == isStatic &&
+				method.name == name &&
+				method.descriptor == descriptor {
+
+				return method
+			}
 		}
 	}
 	return nil
 }
 
-func isStaticMethod(method *Method, name string, descriptor string) bool {
-	return method.IsStatic() && method.name == name && method.descriptor == descriptor
+func (cl *Class) getField(name, descriptor string, isStatic bool) *Field {
+	for c := cl; c != nil; c = c.superClass {
+		for _, field := range c.fields {
+			if field.IsStatic() == isStatic &&
+				field.name == name &&
+				field.descriptor == descriptor {
+
+				return field
+			}
+		}
+	}
+	return nil
 }
 
 func (cl *Class) NewObject() *Object {
 	return newObject(cl)
+}
+
+func (cl *Class) ArrayClass() *Class {
+	arrayClassName := getArrayClassName(cl.name)
+	return cl.loader.LoadClass(arrayClassName)
 }

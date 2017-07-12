@@ -29,11 +29,28 @@ func NewClassLoader(cp *classpath.Classpath, isVerbose bool) *ClassLoader {
 
 func (c *ClassLoader) LoadClass(name string) *Class {
 	if class, ok := c.classMap[name]; ok {
-		// already loaded
 		return class
 	}
-
+	if name[0] == '[' {
+		return c.loadArrayClass(name)
+	}
 	return c.loadNonArrayClass(name)
+}
+
+func (c *ClassLoader) loadArrayClass(name string) *Class {
+	class := &Class{
+		accessFlags: ACC_PUBLIC, //todo
+		name:        name,
+		loader:      c,
+		initStarted: true,
+		superClass:  c.LoadClass("java/lang/Object"),
+		interfaces: []*Class{
+			c.LoadClass("java/lang/Cloneable"),
+			c.LoadClass("java/lang/Serializable"),
+		},
+	}
+	c.classMap[name] = class
+	return class
 }
 
 // 加载普通
