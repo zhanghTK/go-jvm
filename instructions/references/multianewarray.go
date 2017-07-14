@@ -6,7 +6,7 @@ import (
 	"GJvm/rtda/heap"
 )
 
-// Create new multidimensional array
+// 创建多维数组
 type MULTI_ANEW_ARRAY struct {
 	index      uint16 // 类符号引用
 	dimensions uint8  // 数组维度
@@ -17,12 +17,15 @@ func (m *MULTI_ANEW_ARRAY) FetchOperands(reader *base.BytecodeReader) {
 	m.dimensions = reader.ReadUint8()
 }
 func (m *MULTI_ANEW_ARRAY) Execute(frame *rtda.Frame) {
+	// 解析类，注意这里解析出来的是数组类，而不是数组元素的类
 	cp := frame.Method().Class().ConstantPool()
 	classRef := cp.GetConstant(uint(m.index)).(*heap.ClassRef)
 	arrClass := classRef.ResolvedClass()
 
 	stack := frame.OperandStack()
+	// 数组有多少维度从操作数栈中弹出多少个整数表示每个维度长度
 	counts := popAndCheckCounts(stack, int(m.dimensions))
+	// 创建多维数组
 	arr := newMultiDimensionalArray(counts, arrClass)
 	stack.PushRef(arr)
 }

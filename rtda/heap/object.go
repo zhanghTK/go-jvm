@@ -3,6 +3,7 @@ package heap
 // 临时用来表示对象
 type Object struct {
 	class *Class      // 类信息指针
+	// 以interface{}形式容纳各种类型的元素
 	data  interface{} // 实例变量表
 }
 

@@ -31,6 +31,7 @@ func (c *ClassLoader) LoadClass(name string) *Class {
 	if class, ok := c.classMap[name]; ok {
 		return class
 	}
+	// 如果是数组类
 	if name[0] == '[' {
 		return c.loadArrayClass(name)
 	}
@@ -39,10 +40,10 @@ func (c *ClassLoader) LoadClass(name string) *Class {
 
 func (c *ClassLoader) loadArrayClass(name string) *Class {
 	class := &Class{
-		accessFlags: ACC_PUBLIC, //todo
+		accessFlags: ACC_PUBLIC,
 		name:        name,
 		loader:      c,
-		initStarted: true,
+		initStarted: true, // 数组类不需要初始化
 		superClass:  c.LoadClass("java/lang/Object"),
 		interfaces: []*Class{
 			c.LoadClass("java/lang/Cloneable"),

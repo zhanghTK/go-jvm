@@ -6,7 +6,11 @@ import (
 	"GJvm/rtda/heap"
 )
 
-// Load reference from array
+// 按索引取数组元素值并入栈
+// 1. 从操作数栈弹出第一，二个操作数：数组索引，数组引用
+// 2. 检查数组引用，检查数组越界
+// 3. 按元素取出数组入栈
+
 type AALOAD struct{ base.NoOperandsInstruction }
 
 func (a *AALOAD) Execute(frame *rtda.Frame) {

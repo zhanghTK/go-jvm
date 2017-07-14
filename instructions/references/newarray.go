@@ -6,7 +6,8 @@ import (
 	"GJvm/rtda/heap"
 )
 
-// newarray指令的第一个操作数对应的数组类型
+// newarray创建基本类型数组，指令需要两个操作数
+// 第一个操作数在指令字节码后面，操作数值表示对应的数组类型，对应关系如下
 const (
 	//Array Type  atype
 	AT_BOOLEAN = 4
@@ -28,15 +29,16 @@ func (n *NEW_ARRAY) FetchOperands(reader *base.BytecodeReader) {
 	n.atype = reader.ReadUint8()
 }
 func (n *NEW_ARRAY) Execute(frame *rtda.Frame) {
-	// 从操作数栈获取数组长度
+	// 第二个操作数，从操作数栈获取数组长度
 	stack := frame.OperandStack()
 	count := stack.PopInt()
 	if count < 0 {
 		panic("java.lang.NegativeArraySizeException")
 	}
-
+	// 使用当前类加载器数组类
 	classLoader := frame.Method().Class().Loader()
 	arrClass := getPrimitiveArrayClass(classLoader, n.atype)
+	// 创建数组并入栈
 	arr := arrClass.NewArray(uint(count))
 	stack.PushRef(arr)
 }

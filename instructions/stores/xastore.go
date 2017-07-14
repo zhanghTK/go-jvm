@@ -6,7 +6,11 @@ import (
 	"GJvm/rtda/heap"
 )
 
-// Store into reference array
+// 按索引给数组元素赋值
+// 1. 从操作数栈弹出操作数：要赋给数组元素的值、数组索引、数组引用
+// 2. 检查数组引用，检查数组越界
+// 3. 按索引给数组元素赋值
+
 type AASTORE struct{ base.NoOperandsInstruction }
 
 func (a *AASTORE) Execute(frame *rtda.Frame) {

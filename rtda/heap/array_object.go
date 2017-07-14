@@ -1,5 +1,8 @@
 package heap
 
+// 数组特有的方法
+// 根据数组类型返回具体数据
+// 没有专门实现Booleans()方法，与Bytes()方法实现相同
 func (o *Object) Bytes() []int8 {
 	return o.data.([]int8)
 }
@@ -25,6 +28,7 @@ func (o *Object) Refs() []*Object {
 	return o.data.([]*Object)
 }
 
+// 获取数组长度
 func (o *Object) ArrayLength() int32 {
 	switch o.data.(type) {
 	case []int8:
