@@ -9,17 +9,32 @@ import (
 )
 
 // 解释器
-func interpret(method *heap.Method, logInst bool) {
+func interpret(method *heap.Method, logInst bool, args []string) {
 	// 创建线程
 	thread := rtda.NewThread()
 	// 创建栈帧
 	frame := thread.NewFrame(method)
 	// 插入栈帧
 	thread.PushFrame(frame)
+
+	// 创建启动参数字符串数组并存入局部变量表
+	jArgs := createArgsArray(method.Class().Loader(), args)
+	frame.LocalVars().SetRef(0, jArgs)
+
 	// 异常处理
 	defer catchErr(thread)
 	// 循环处理虚拟机栈内容
 	loop(thread, logInst)
+}
+
+func createArgsArray(loader *heap.ClassLoader, args []string) *heap.Object {
+	stringClass := loader.LoadClass("java/lang/String")
+	argsArr := stringClass.ArrayClass().NewArray(uint(len(args)))
+	jArgs := argsArr.Refs()
+	for i, arg := range args {
+		jArgs[i] = heap.JString(loader, arg)
+	}
+	return argsArr
 }
 
 func catchErr(thread *rtda.Thread) {

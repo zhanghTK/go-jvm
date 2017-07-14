@@ -1,8 +1,10 @@
 package classfile
 
+import "strconv"
+
 // 常量类型标识声明
 const (
-	CONSTANT_Utf8               = 1  // UTF-8编码字符串
+	CONSTANT_Utf8               = 1  // MUTF-8编码字符串
 	CONSTANT_Integer            = 3  // 整型字面量
 	CONSTANT_Float              = 4  // 浮点型字面量
 	CONSTANT_Long               = 5  // 长整型字面量
@@ -54,13 +56,13 @@ func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 		return &ConstantInterfaceMethodrefInfo{ConstantMemberrefInfo{cp: cp}}
 	case CONSTANT_NameAndType:
 		return &ConstantNameAndTypeInfo{}
-	//case CONSTANT_MethodType:
-	//	return &ConstantMethodTypeInfo{}
-	//case CONSTANT_MethodHandle:
-	//	return &ConstantMethodHandleInfo{}
-	//case CONSTANT_InvokeDynamic:
-	//	return &ConstantInvokeDynamicInfo{}
+	case CONSTANT_MethodType:
+		return &ConstantMethodTypeInfo{}
+	case CONSTANT_MethodHandle:
+		return &ConstantMethodHandleInfo{}
+	case CONSTANT_InvokeDynamic:
+		return &ConstantInvokeDynamicInfo{}
 	default:
-		panic("java.lang.ClassFormatError: constant pool tag!")
+		panic("java.lang.ClassFormatError: constant pool tag：" + strconv.Itoa(int(tag)))
 	}
 }

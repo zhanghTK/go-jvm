@@ -3,9 +3,10 @@ package constants
 import (
 	"GJvm/instructions/base"
 	"GJvm/rtda"
+	"GJvm/rtda/heap"
 )
 
-// Push item from run-time constant pool
+// 将常量从常量池压入栈中
 type LDC struct{ base.Index8Instruction }
 
 func (l *LDC) Execute(frame *rtda.Frame) {
@@ -21,15 +22,18 @@ func (l *LDC_W) Execute(frame *rtda.Frame) {
 
 func _ldc(frame *rtda.Frame, index uint) {
 	stack := frame.OperandStack()
-	cp := frame.Method().Class().ConstantPool()
-	c := cp.GetConstant(index)
+	class := frame.Method().Class()
+	c := class.ConstantPool().GetConstant(index)
 
 	switch c.(type) {
 	case int32:
 		stack.PushInt(c.(int32))
 	case float32:
 		stack.PushFloat(c.(float32))
-		// case string:
+	case string:
+		// 先获取Go字符串转换成Java字符串再压栈
+		internedStr := heap.JString(class.Loader(), c.(string))
+		stack.PushRef(internedStr)
 		// case *heap.ClassRef:
 		// case MethodType, MethodHandle
 	default:
