@@ -12,7 +12,7 @@ func JString(loader *ClassLoader, goStr string) *Object {
 	}
 	// 将Go字符串形式转换成Java字符串形式
 	chars := stringToUtf16(goStr)
-	jChars := &Object{loader.LoadClass("[C"), chars}
+	jChars := &Object{loader.LoadClass("[C"), chars, nil}
 	// 创建Java字符串，赋值
 	jStr := loader.LoadClass("java/lang/String").NewObject()
 	jStr.SetRefVar("value", "[C", jChars)

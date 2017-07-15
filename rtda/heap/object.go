@@ -2,9 +2,10 @@ package heap
 
 // 临时用来表示对象
 type Object struct {
-	class *Class      // 类信息指针
+	class *Class // 类信息指针
 	// 以interface{}形式容纳各种类型的元素
 	data  interface{} // 实例变量表
+	extra interface{} // 对象对应类的结构体指针
 }
 
 func newObject(class *Class) *Object {
@@ -20,6 +21,12 @@ func (o *Object) Class() *Class {
 }
 func (o *Object) Fields() Slots {
 	return o.data.(Slots)
+}
+func (o *Object) Extra() interface{} {
+	return o.extra
+}
+func (o *Object) SetExtra(extra interface{}) {
+	o.extra = extra
 }
 
 func (o *Object) IsInstanceOf(class *Class) bool {

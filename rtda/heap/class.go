@@ -20,7 +20,8 @@ type Class struct {
 	instanceSlotCount uint          // 实例变量数量
 	staticSlotCount   uint          // 静态变量数量
 	staticVars        Slots         // 静态变量
-	initStarted       bool
+	initStarted       bool          // 类是否初始化
+	jClass            *Object       // 类的类对象
 }
 
 // class文件信息转换为class结构体信息
@@ -86,9 +87,11 @@ func (cl *Class) StaticVars() Slots {
 func (cl *Class) InitStarted() bool {
 	return cl.initStarted
 }
-
 func (cl *Class) StartInit() {
 	cl.initStarted = true
+}
+func (cl *Class) JClass() *Object {
+	return cl.jClass
 }
 
 // jvms 5.4.4
@@ -158,4 +161,13 @@ func (cl *Class) NewObject() *Object {
 func (cl *Class) ArrayClass() *Class {
 	arrayClassName := getArrayClassName(cl.name)
 	return cl.loader.LoadClass(arrayClassName)
+}
+
+func (cl *Class) JavaName() string {
+	return strings.Replace(cl.name, "/", ".", -1)
+}
+
+func (cl *Class) IsPrimitive() bool {
+	_, ok := primitiveTypes[cl.name]
+	return ok
 }

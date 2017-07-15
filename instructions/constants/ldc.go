@@ -36,6 +36,11 @@ func _ldc(frame *rtda.Frame, index uint) {
 		stack.PushRef(internedStr)
 		// case *heap.ClassRef:
 		// case MethodType, MethodHandle
+	case *heap.ClassRef:
+		classRef := c.(*heap.ClassRef)
+		classObj := classRef.ResolvedClass().JClass()
+		stack.PushRef(classObj)
+		// case MethodType, MethodHandle
 	default:
 		panic("todo: ldc!")
 	}
