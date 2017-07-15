@@ -171,3 +171,16 @@ func (cl *Class) IsPrimitive() bool {
 	_, ok := primitiveTypes[cl.name]
 	return ok
 }
+
+func (cl *Class) GetInstanceMethod(name, descriptor string) *Method {
+	return cl.getMethod(name, descriptor, false)
+}
+
+func (cl *Class) GetRefVar(fieldName, fieldDescriptor string) *Object {
+	field := cl.getField(fieldName, fieldDescriptor, true)
+	return cl.staticVars.GetRef(field.slotId)
+}
+func (cl *Class) SetRefVar(fieldName, fieldDescriptor string, ref *Object) {
+	field := cl.getField(fieldName, fieldDescriptor, true)
+	cl.staticVars.SetRef(field.slotId, ref)
+}

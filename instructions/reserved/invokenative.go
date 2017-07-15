@@ -4,6 +4,7 @@ import (
 	"GJvm/instructions/base"
 	"GJvm/native"
 	_ "GJvm/native/java/lang"
+	_ "GJvm/native/sun/misc"
 	"GJvm/rtda"
 )
 
