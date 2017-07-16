@@ -50,3 +50,17 @@ func (s *Stack) top() *Frame {
 func (s *Stack) isEmpty() bool {
 	return s._top == nil
 }
+
+func (s *Stack) clear() {
+	for !s.isEmpty() {
+		s.pop()
+	}
+}
+
+func (s *Stack) getFrames() []*Frame {
+	frames := make([]*Frame, 0, s.size)
+	for frame := s._top; frame != nil; frame = frame.lower {
+		frames = append(frames, frame)
+	}
+	return frames
+}

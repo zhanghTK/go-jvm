@@ -11,7 +11,7 @@ Code_attribute {
     u2 exception_table_length;
     {   u2 start_pc;  // 起始行（方法体开始偏移）
         u2 end_pc;  // 结束行（方法体开始偏移）
-        u2 handler_pc;  // 异常处理（开发体开始偏移）
+        u2 handler_pc;  // 异常处理（方法体开始偏移）
         u2 catch_type;  // 异常类型，CONSTANT_Class_info型常量索引
     } exception_table[exception_table_length];  // 显示异常处理表
     u2 attributes_count;
@@ -47,6 +47,15 @@ func (c *CodeAttribute) Code() []byte {
 }
 func (c *CodeAttribute) ExceptionTable() []*ExceptionTableEntry {
 	return c.exceptionTable
+}
+func (c *CodeAttribute) LineNumberTableAttribute() *LineNumberTableAttribute {
+	for _, attrInfo := range c.attributes {
+		switch attrInfo.(type) {
+		case *LineNumberTableAttribute:
+			return attrInfo.(*LineNumberTableAttribute)
+		}
+	}
+	return nil
 }
 
 type ExceptionTableEntry struct {

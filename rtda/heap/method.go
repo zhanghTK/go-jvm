@@ -4,10 +4,12 @@ import "GJvm/classfile"
 
 type Method struct {
 	ClassMember
-	maxStack     uint   // 操作数栈大小
-	maxLocals    uint   // 局部变量表大小
-	code         []byte // 字节码
-	argSlotCount uint   // 参数个数
+	maxStack        uint           // 操作数栈大小
+	maxLocals       uint           // 局部变量表大小
+	code            []byte         // 字节码
+	argSlotCount    uint           // 参数个数
+	exceptionTable  ExceptionTable // 异常处理表
+	lineNumberTable *classfile.LineNumberTableAttribute
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -36,6 +38,8 @@ func (m *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 		m.maxStack = codeAttr.MaxStack()
 		m.maxLocals = codeAttr.MaxLocals()
 		m.code = codeAttr.Code()
+		m.lineNumberTable = codeAttr.LineNumberTableAttribute()
+		m.exceptionTable = newExceptionTable(codeAttr.ExceptionTable(), m.class.constantPool)
 	}
 }
 
@@ -104,4 +108,22 @@ func (m *Method) Code() []byte {
 }
 func (m *Method) ArgSlotCount() uint {
 	return m.argSlotCount
+}
+
+func (m *Method) FindExceptionHandler(exClass *Class, pc int) int {
+	handler := m.exceptionTable.findExceptionHandler(exClass, pc)
+	if handler != nil {
+		return handler.handlerPc
+	}
+	return -1
+}
+
+func (m *Method) GetLineNumber(pc int) int {
+	if m.IsNative() {
+		return -2
+	}
+	if m.lineNumberTable == nil {
+		return -1
+	}
+	return m.lineNumberTable.GetLineNumber(pc)
 }

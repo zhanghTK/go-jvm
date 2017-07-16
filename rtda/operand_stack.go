@@ -97,3 +97,9 @@ func (o *OperandStack) PushBoolean(val bool) {
 func (o *OperandStack) PopBoolean() bool {
 	return o.PopInt() == 1
 }
+func (o *OperandStack) Clear() {
+	o.size = 0
+	for i := range o.slots {
+		o.slots[i].ref = nil
+	}
+}

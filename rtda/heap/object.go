@@ -5,7 +5,7 @@ type Object struct {
 	class *Class // 类信息指针
 	// 以interface{}形式容纳各种类型的元素
 	data  interface{} // 实例变量表
-	extra interface{} // 对象对应类的结构体指针
+	extra interface{} // 对象对应类的结构体指针&异常对象存储虚拟机栈信息
 }
 
 func newObject(class *Class) *Object {

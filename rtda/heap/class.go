@@ -22,6 +22,7 @@ type Class struct {
 	staticVars        Slots         // 静态变量
 	initStarted       bool          // 类是否初始化
 	jClass            *Object       // 类的类对象
+	sourceFile        string
 }
 
 // class文件信息转换为class结构体信息
@@ -34,7 +35,15 @@ func newClass(cf *classfile.ClassFile) *Class {
 	class.constantPool = newConstantPool(class, cf.ConstantPool())
 	class.fields = newFields(class, cf.Fields())
 	class.methods = newMethods(class, cf.Methods())
+	class.sourceFile = getSourceFile(cf)
 	return class
+}
+
+func getSourceFile(cf *classfile.ClassFile) string {
+	if sfAttr := cf.SourceFileAttribute(); sfAttr != nil {
+		return sfAttr.FileName()
+	}
+	return "Unknown" // todo
 }
 
 func (cl *Class) IsPublic() bool {
@@ -74,6 +83,9 @@ func (cl *Class) Fields() []*Field {
 }
 func (cl *Class) Methods() []*Method {
 	return cl.methods
+}
+func (cl *Class) SourceFile() string {
+	return cl.sourceFile
 }
 func (cl *Class) Loader() *ClassLoader {
 	return cl.loader
