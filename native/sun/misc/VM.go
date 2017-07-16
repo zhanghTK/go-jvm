@@ -16,7 +16,9 @@ func init() {
 func initialize(frame *rtda.Frame) {
 	vmClass := frame.Method().Class()
 	savedProps := vmClass.GetRefVar("savedProps", "Ljava/util/Properties;")
-	key := heap.JString(vmClass.Loader(), "test")
+	// sun.misc.VM.initialize完成巨复杂
+	// 这里完成Props的初始化
+	key := heap.JString(vmClass.Loader(), "todo")
 	val := heap.JString(vmClass.Loader(), "test")
 
 	frame.OperandStack().PushRef(savedProps)

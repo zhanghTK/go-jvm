@@ -4,37 +4,12 @@ import (
 	"GJvm/instructions"
 	"GJvm/instructions/base"
 	"GJvm/rtda"
-	"GJvm/rtda/heap"
 	"fmt"
 )
 
-// 解释器
-func interpret(method *heap.Method, logInst bool, args []string) {
-	// 创建线程
-	thread := rtda.NewThread()
-	// 创建栈帧
-	frame := thread.NewFrame(method)
-	// 插入栈帧
-	thread.PushFrame(frame)
-
-	// 创建启动参数字符串数组并存入局部变量表
-	jArgs := createArgsArray(method.Class().Loader(), args)
-	frame.LocalVars().SetRef(0, jArgs)
-
-	// 异常处理
+func interpret(thread *rtda.Thread, logInst bool) {
 	defer catchErr(thread)
-	// 循环处理虚拟机栈内容
 	loop(thread, logInst)
-}
-
-func createArgsArray(loader *heap.ClassLoader, args []string) *heap.Object {
-	stringClass := loader.LoadClass("java/lang/String")
-	argsArr := stringClass.ArrayClass().NewArray(uint(len(args)))
-	jArgs := argsArr.Refs()
-	for i, arg := range args {
-		jArgs[i] = heap.JString(loader, arg)
-	}
-	return argsArr
 }
 
 func catchErr(thread *rtda.Thread) {
@@ -49,6 +24,7 @@ func loop(thread *rtda.Thread, logInst bool) {
 	for {
 		frame := thread.CurrentFrame()
 		pc := frame.NextPC()
+		// 更新当前PC位置
 		thread.SetPC(pc)
 
 		// decode
@@ -59,7 +35,7 @@ func loop(thread *rtda.Thread, logInst bool) {
 		inst := instructions.NewInstruction(opcode)
 		// 读取操作数
 		inst.FetchOperands(reader)
-		// 更新PC位置
+		// 更新下一条PC位置
 		frame.SetNextPC(reader.PC())
 
 		if logInst {
@@ -68,7 +44,6 @@ func loop(thread *rtda.Thread, logInst bool) {
 
 		// 执行指令
 		inst.Execute(frame)
-
 		if thread.IsStackEmpty() {
 			break
 		}
@@ -88,7 +63,8 @@ func logFrames(thread *rtda.Thread) {
 		frame := thread.PopFrame()
 		method := frame.Method()
 		className := method.Class().Name()
-		fmt.Printf(">> pc:%4d %v.%v%v \n",
-			frame.NextPC(), className, method.Name(), method.Descriptor())
+		lineNum := method.GetLineNumber(frame.NextPC())
+		fmt.Printf(">> line:%4d pc:%4d %v.%v%v \n",
+			lineNum, frame.NextPC(), className, method.Name(), method.Descriptor())
 	}
 }
