@@ -9,7 +9,7 @@ type Frame struct {
 	operandStack *OperandStack // 操作数栈
 	thread       *Thread
 	method       *heap.Method
-	nextPC       int
+	nextPC       int // 虚拟机的下一条指令位置，为了方便实现跳转指令
 }
 
 func newFrame(thread *Thread, method *heap.Method) *Frame {
